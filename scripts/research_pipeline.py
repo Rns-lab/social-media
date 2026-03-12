@@ -81,29 +81,83 @@ async def run_notebooklm(topic: str, source_urls: list[str]) -> dict:
             except Exception as e:
                 print(f"    Warning: could not add source: {e}")
 
-        print("  Querying for insights...")
-        raw = await client.chat.ask(
+        print("  Querying for deep insights (pass 1 — facts & mechanics)...")
+        raw1 = await client.chat.ask(
             nb.id,
-            f"""Analyze all sources about "{topic}" and provide:
-1. TOP 5 KEY STATS or numbers (with sources if available)
-2. CORE INSIGHT: What is the single most important thing a business leader must understand about this topic?
-3. CONTROVERSY or RISK: What is the most important concern, failure mode, or contrarian view?
-4. INDUSTRY USE CASES: Specific, concrete applications for:
-   - Private Equity / Family Offices
-   - Management Consulting (boutique/mid-tier)
-   - Real Estate (commercial/development)
-   - Wealth Management / Financial Advisory
-5. CONTENT ANGLES: 5 compelling post hooks for a LinkedIn audience of CEOs and decision-makers
+            f"""You are a world-class analyst extracting intelligence from expert sources on "{topic}".
 
-Be specific. Use numbers. Avoid vague claims."""
+Your job: find what most people DON'T know. Surface the specific, counter-intuitive, and non-obvious.
+
+EXTRACT THE FOLLOWING — be ruthlessly specific, cite exact numbers whenever available:
+
+## 1. SURPRISING STATS
+List 5–7 data points that would stop a CEO mid-scroll. Not generic stats — the ones that reframe how smart people think about this topic. Include the source name for each.
+
+## 2. THE THING EXPERTS GET WRONG
+What is the single most common misconception or mistake even experienced practitioners make? What do the sources reveal that contradicts conventional wisdom?
+
+## 3. THE HIDDEN MECHANIC
+What is the underlying mechanism or root cause that, once understood, makes everything else click? The insight that makes you say "oh, that's why."
+
+## 4. WHAT ACTUALLY KILLS RESULTS
+Not generic risks — the specific failure modes from the sources. What do people do that looks right but kills the outcome? Give exact examples if available.
+
+## 5. THE COUNTER-INTUITIVE MOVE
+What is one action that seems wrong but produces dramatically better results? If the sources show a technique that goes against gut instinct, surface it here.
+
+## 6. EXACT STEP-BY-STEP (most valuable section)
+Extract the most actionable process from the sources. Not "implement X" — the actual sequence of steps a practitioner would follow. Number them. Be specific enough that someone could execute immediately.
+
+## 7. INDUSTRY-SPECIFIC ANGLES (with real numbers or outcomes where available)
+For each industry below, what is the specific, concrete application — not generic advice:
+- Private Equity / Family Offices
+- Boutique Management Consulting
+- Real Estate (commercial/development)
+- Wealth Management / Financial Advisory
+
+## 8. THE LEAD MAGNET HOOK
+What is the single most valuable piece of insight from these sources — the thing someone would pay for, that we can give away for free to build authority? One sentence."""
         )
 
-        if hasattr(raw, "text"):
-            insights = raw.text
-        elif hasattr(raw, "answer"):
-            insights = raw.answer
+        if hasattr(raw1, "text"):
+            insights_pass1 = raw1.text
+        elif hasattr(raw1, "answer"):
+            insights_pass1 = raw1.answer
         else:
-            insights = str(raw)
+            insights_pass1 = str(raw1)
+
+        print("  Querying for content angles (pass 2 — Hormozi hooks)...")
+        raw2 = await client.chat.ask(
+            nb.id,
+            f"""Based on everything in the sources about "{topic}", generate 5 LinkedIn post hooks following these exact rules:
+
+HOOK RULES (Alex Hormozi style):
+- Open with a specific number or counter-intuitive claim — never a question
+- Make the reader feel like they're about to learn something they can't unlearn
+- The hook must work without context — a stranger scrolling must stop
+- No buzzwords: no "game-changer", "revolutionary", "unlock", "leverage"
+- Max 2 lines. The more specific, the better.
+
+For each hook also provide:
+- The ONE core insight that post would be built around (from the sources, not invented)
+- The industry angle it targets (PE / Consulting / RE / Wealth Mgmt / General)
+- The lead magnet it would link to (what resource would make someone DM you)
+
+Format each as:
+HOOK: [the hook]
+CORE INSIGHT: [the insight]
+TARGET: [industry]
+LEAD MAGNET: [resource type]"""
+        )
+
+        if hasattr(raw2, "text"):
+            insights_pass2 = raw2.text
+        elif hasattr(raw2, "answer"):
+            insights_pass2 = raw2.answer
+        else:
+            insights_pass2 = str(raw2)
+
+        insights = f"{insights_pass1}\n\n---\n\n## CONTENT HOOKS (Hormozi Style)\n\n{insights_pass2}"
 
         return {
             "notebook_id": nb.id,
