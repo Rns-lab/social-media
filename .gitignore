@@ -1,0 +1,21 @@
+# Claude session data
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+*.egg-info/
+
+# macOS
+.DS_Store
+
+# NotebookLM auth (never commit)
+.notebooklm/
+
+# Environment files
+*.env
+.env.*
