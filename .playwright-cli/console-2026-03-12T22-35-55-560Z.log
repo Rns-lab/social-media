@@ -1,0 +1,2 @@
+[   60442ms] [WARNING] Warning: Failed to re-render. We will retry on the next Fast Refresh event.
+Error: supabaseUrl is required. @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/@next/react-refresh-utils/dist/internal/helpers.js:141

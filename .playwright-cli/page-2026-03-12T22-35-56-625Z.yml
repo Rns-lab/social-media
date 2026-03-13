@@ -1,0 +1,30 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - paragraph [ref=e7]: Residenza Montenapoleone · Milano
+      - heading "Come vuoi il tuo spazio?" [level=1] [ref=e8]:
+        - text: Come vuoi
+        - text: il tuo spazio?
+      - paragraph [ref=e9]: Scegli uno stile e l'IA genererà i tuoi interni.
+    - generic [ref=e10]:
+      - button "Minimal Essenziale. Ogni elemento conta." [ref=e11] [cursor=pointer]:
+        - generic [ref=e14]:
+          - paragraph [ref=e15]: Minimal
+          - paragraph [ref=e16]: Essenziale. Ogni elemento conta.
+      - button "Industrial Grezzo. Autentico. Urbano." [ref=e18] [cursor=pointer]:
+        - generic [ref=e21]:
+          - paragraph [ref=e22]: Industrial
+          - paragraph [ref=e23]: Grezzo. Autentico. Urbano.
+      - button "Nordic Calore nordico, atmosfera hygge." [ref=e25] [cursor=pointer]:
+        - generic [ref=e28]:
+          - paragraph [ref=e29]: Nordic
+          - paragraph [ref=e30]: Calore nordico, atmosfera hygge.
+      - button "Luxury Eleganza senza tempo." [ref=e32] [cursor=pointer]:
+        - generic [ref=e35]:
+          - paragraph [ref=e36]: Luxury
+          - paragraph [ref=e37]: Eleganza senza tempo.
+      - button "Wabi-Sabi Imperfezione elevata ad arte." [ref=e39] [cursor=pointer]:
+        - generic [ref=e42]:
+          - paragraph [ref=e43]: Wabi-Sabi
+          - paragraph [ref=e44]: Imperfezione elevata ad arte.
+  - alert [ref=e48]

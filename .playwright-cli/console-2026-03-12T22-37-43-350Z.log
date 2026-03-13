@@ -1,0 +1,115 @@
+[     273ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Fproperty%2Fdemo-raw.jpg&w=1920&q=75:0
+[     960ms] [WARNING] Image with src "/property/demo-raw.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/shared/lib/utils/warn-once.js:15
+[  731435ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/?_rsc=1p60s:0
+[  731801ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/?_rsc=1p60s:0
+[  732184ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/:0
+[  733929ms] Error: Cannot find module './276.js'
+Require stack:
+- /Users/pietropiga/Real Estate Rendering Agent/.next/server/webpack-runtime.js
+- /Users/pietropiga/Real Estate Rendering Agent/.next/server/app/page.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/require.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/load-components.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/build/utils.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/router-server.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1249:15)
+    at <unknown> (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/require-hook.js:55:36)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1340:12)
+    at mod.require (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:138:16)
+    at __webpack_require__.f.require (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/webpack-runtime.js:198:28)
+    at <unknown> (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/webpack-runtime.js:111:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/webpack-runtime.js:162:22)
+    at <unknown> (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/app/page.js:1:71116)
+    at Object.<anonymous> (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/app/page.js:1:71165)
+    at Module._compile (node:internal/modules/cjs/loader:1565:14)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1340:12)
+    at mod.require (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:138:16)
+    at requirePage (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/require.js:109:84)
+    at <unknown> (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/load-components.js:103:84)
+    at async loadComponentsImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderPageComponent (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/base-server.js:1910:24)
+    at async DevServer.renderToResponseImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/base-server.js:818:17)
+    at async (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/dev/next-dev-server.js:339:20)
+    at async Span.traceAsyncFn (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/start-server.js:141:13)
+[  799520ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:349
+[  799897ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/:0
+[  800625ms] Error: Cannot find module './276.js'
+Require stack:
+- /Users/pietropiga/Real Estate Rendering Agent/.next/server/webpack-runtime.js
+- /Users/pietropiga/Real Estate Rendering Agent/.next/server/app/mobile/page.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/require.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/load-components.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/build/utils.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/router-server.js
+- /Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1249:15)
+    at <unknown> (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/require-hook.js:55:36)
+    at Function._load (node:internal/modules/cjs/loader:1075:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1340:12)
+    at mod.require (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:138:16)
+    at __webpack_require__.f.require (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/webpack-runtime.js:198:28)
+    at <unknown> (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/webpack-runtime.js:111:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/webpack-runtime.js:162:22)
+    at <unknown> (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/app/page.js:1:71116)
+    at Object.<anonymous> (file:///Users/pietropiga/Real Estate Rendering Agent/.next/server/app/page.js:1:71165)
+    at Module._compile (node:internal/modules/cjs/loader:1565:14)
+    at Object..js (node:internal/modules/cjs/loader:1708:10)
+    at Module.load (node:internal/modules/cjs/loader:1318:32)
+    at Function._load (node:internal/modules/cjs/loader:1128:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:219:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1340:12)
+    at mod.require (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:138:16)
+    at requirePage (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/require.js:109:84)
+    at <unknown> (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/load-components.js:103:84)
+    at async loadComponentsImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderPageComponent (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/base-server.js:1910:24)
+    at async DevServer.renderToResponseImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/base-server.js:818:17)
+    at async (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/dev/next-dev-server.js:339:20)
+    at async Span.traceAsyncFn (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (file:///Users/pietropiga/Real Estate Rendering Agent/node_modules/next/dist/server/lib/start-server.js:141:13)
