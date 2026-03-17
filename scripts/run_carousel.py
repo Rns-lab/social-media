@@ -65,6 +65,8 @@ def main():
     with open(content_path) as f:
         data = json.load(f)
     slug = data.get("slug", "carousel")
+    # logos: CLI flag takes priority, then carousel JSON field, then fallback to Claude logo
+    logos_resolved = args.logos or data.get("logos") or None
 
     out_dir = args.output_dir or str(ASSETS / "images" / "carousel_final")
 
@@ -76,11 +78,11 @@ def main():
     threads = []
     results = {}
 
-    # 1. Diagrams
+    # 1. Diagrams (topic-specific generator — reads carousel JSON for diagram registry)
     if not args.no_diagrams:
         t = threading.Thread(
             target=run_step,
-            args=("Diagrams", [sys.executable, str(BASE / "generate_diagrams.py"), "--slug", slug], results, "diagrams")
+            args=("Diagrams", [sys.executable, str(BASE / "generate_topic_diagrams.py"), str(content_path)], results, "diagrams")
         )
         threads.append(t)
 
@@ -98,8 +100,8 @@ def main():
                 "--subline",  args.cover_subline,
                 "--out",      str(cover_out),
             ]
-            if args.logos:
-                cover_cmd += ["--logos", args.logos]
+            if logos_resolved:
+                cover_cmd += ["--logos", logos_resolved]
             t = threading.Thread(
                 target=run_step,
                 args=("Cover thumbnail", cover_cmd, results, "cover")

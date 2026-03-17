@@ -208,6 +208,9 @@ def main():
 
     data = generate_copy(topic, slug, insights)
     data = inject_images(data, slug)
+    # Preserve logos field from research JSON if present; otherwise null (fill manually)
+    if "logos" not in data:
+        data["logos"] = research.get("logos", None)
     print_review(data)
 
     out_dir  = Path(args.output_dir) if args.output_dir else SCRIPTS
