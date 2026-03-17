@@ -54,6 +54,7 @@ def main():
     ap.add_argument("--nlm-wait",       type=int, default=20,        help="Seconds to wait after pressing play (default: 20)")
     ap.add_argument("--no-diagrams",    action="store_true",         help="Skip diagram generation")
     ap.add_argument("--no-cover",       action="store_true",         help="Skip cover thumbnail generation")
+    ap.add_argument("--logos",          default=None,                help="Topic logos for thumbnail: 'path:label,path:label' (up to 3)")
     args = ap.parse_args()
 
     content_path = Path(args.content)
@@ -89,16 +90,19 @@ def main():
     cover_out.parent.mkdir(parents=True, exist_ok=True)
     if not args.no_cover:
         if face_path.exists():
+            cover_cmd = [
+                sys.executable, str(BASE / "generate_cover_thumbnail.py"),
+                "--face",     str(face_path),
+                "--topic",    args.cover_topic,
+                "--headline", args.cover_headline,
+                "--subline",  args.cover_subline,
+                "--out",      str(cover_out),
+            ]
+            if args.logos:
+                cover_cmd += ["--logos", args.logos]
             t = threading.Thread(
                 target=run_step,
-                args=("Cover thumbnail", [
-                    sys.executable, str(BASE / "generate_cover_thumbnail.py"),
-                    "--face",     str(face_path),
-                    "--topic",    args.cover_topic,
-                    "--headline", args.cover_headline,
-                    "--subline",  args.cover_subline,
-                    "--out",      str(cover_out),
-                ], results, "cover")
+                args=("Cover thumbnail", cover_cmd, results, "cover")
             )
             threads.append(t)
         else:
