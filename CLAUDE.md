@@ -46,8 +46,9 @@ After running → say "pipeline done" → Claude creates Notion pages + Calendar
 
 ## Notion Formatting Rules (critical)
 - NEVER blank lines inside blockquotes — creates "Empty quote" blocks
-- Footer: `*From Pietro Piga AI Sales Advisor*`
-- NO Sources section, NO NotebookLM attribution in page content
+- Article footer (Research Deep Dive section): attribution line `*An article by Pietro Piga — AI Sales Advisor*` + NLM video link + infographic image
+- NO "This article is based on..." or any NotebookLM attribution text
+- NO Sources section
 
 ## Infographic hosting
 Raw URL: `https://raw.githubusercontent.com/Rns-lab/social-media/main/assets/infographics/{slug}.png`

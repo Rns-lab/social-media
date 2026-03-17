@@ -232,13 +232,14 @@ Hook formula (YouTube-proven): [Known Tool/Pain] + [Business Action] + [$ or Tim
 """
 
 
-def generate_content(topic: str, slug: str, insights: str, infographic_url: str | None) -> dict:
+def generate_content(topic: str, slug: str, insights: str, infographic_url: str | None, nlm_video_url: str | None = None) -> dict:
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
-    infographic_line = (
-        f"## 📊 Key Stats at a Glance\n\n![{topic} Infographic]({infographic_url})\n\n"
-        if infographic_url else ""
-    )
+    research_deep_dive = "---\n## Research Deep Dive\n\n*An article by Pietro Piga — AI Sales Advisor*\n\n"
+    if nlm_video_url:
+        research_deep_dive += f"[Watch the AI-generated Video Overview →]({nlm_video_url})\n\n"
+    if infographic_url:
+        research_deep_dive += f"---\n\n![{topic} Infographic]({infographic_url})\n"
 
     prompt = f"""\
 Topic: "{topic}"
@@ -262,8 +263,7 @@ TASK: Create all content for this topic. Return a single JSON object.
        ### 🔍 Boutique Management Consulting
        ### 🏗️ Real Estate (Commercial / Development)
        ### 💼 Wealth Management / Financial Advisory
-       ---
-       {infographic_line}*From Pietro Piga AI Sales Advisor*
+       {research_deep_dive}
    - Rules: NO Sources section. NO NotebookLM attribution. Tables and code blocks allowed.
 
 2. X POST (contrarian angle, < 260 chars total caption)
@@ -407,6 +407,7 @@ def main():
     slug           = research["slug"]
     insights       = research.get("insights", "")
     infographic_url = research.get("infographic_url")
+    nlm_video_url   = research.get("nlm_video_url")
 
     print(f"\n=== Notion Page Creator ===")
     print(f"Topic  : {topic}")
@@ -416,7 +417,7 @@ def main():
 
     # ── Generate content ──────────────────────────────────────────────────────
     print("→ Generating content with Claude Opus…")
-    content = generate_content(topic, slug, insights, infographic_url)
+    content = generate_content(topic, slug, insights, infographic_url, nlm_video_url)
 
     article_title = content["article_title"]
     article_body  = content["article_body"]
