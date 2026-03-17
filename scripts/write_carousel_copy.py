@@ -28,6 +28,31 @@ import anthropic
 ASSETS  = Path(__file__).parent.parent / "assets"
 SCRIPTS = Path(__file__).parent
 
+# Brand detection registry: keyword (lowercase) → (logo path relative to project root, display label)
+# Add new brands here as logos become available in assets/resources/logos/
+BRAND_REGISTRY = {
+    "perplexity":   ("assets/resources/logos/perplexity.png",   "Perplexity"),
+    "manus":        ("assets/resources/logos/manus.png",         "Manus"),
+    "gemini":       ("assets/resources/logos/gemini.png",        "Gemini"),
+    "claude":       ("assets/resources/Claude Logo Compact.png", "Claude"),
+    "anthropic":    ("assets/resources/Claude Logo Compact.png", "Anthropic"),
+    "openai":       ("assets/resources/logos/openai.png",        "OpenAI"),
+    "chatgpt":      ("assets/resources/logos/openai.png",        "ChatGPT"),
+    "gpt-4":        ("assets/resources/logos/openai.png",        "GPT-4"),
+    "gpt-5":        ("assets/resources/logos/openai.png",        "GPT-5"),
+    "deepseek":     ("assets/resources/logos/deepseek.png",      "DeepSeek"),
+    "grok":         ("assets/resources/logos/grok.png",          "Grok"),
+    "mistral":      ("assets/resources/logos/mistral.png",       "Mistral"),
+    "llama":        ("assets/resources/logos/meta.png",          "Meta/Llama"),
+    "cursor":       ("assets/resources/logos/cursor.png",        "Cursor"),
+    "copilot":      ("assets/resources/logos/copilot.png",       "Copilot"),
+    "notion":       ("assets/resources/logos/notion.png",        "Notion"),
+    "zapier":       ("assets/resources/logos/zapier.png",        "Zapier"),
+    "make.com":     ("assets/resources/logos/make.png",          "Make"),
+    "n8n":          ("assets/resources/logos/n8n.png",           "n8n"),
+    "github":       ("assets/resources/logos/github.png",        "GitHub"),
+}
+
 SYSTEM_PROMPT = """\
 You are a social media content writer for Pietro Piga, an AI Sales Advisor.
 Target: CEOs, PE operators, management consultants, real estate professionals on X (Twitter).
@@ -69,6 +94,53 @@ LANGUAGE RULES:
 
 OUTPUT: Return ONLY valid JSON matching the schema. No markdown fences, no explanation.\
 """
+
+
+def detect_logos(data: dict, slug: str) -> str | None:
+    """
+    Scan carousel slide text for brand mentions, map to logo files (max 3).
+    - Found brands with existing logo files → included in logos string
+    - Found brands WITHOUT logo files → warning printed, asks Pietro to provide
+    - Returns None if nothing found (falls back to Claude logo in thumbnail)
+    """
+    project_root = ASSETS.parent
+
+    # Collect all text from slides (hook + value slides; skip CTA which is generic)
+    text = " ".join(
+        " ".join(slide.get("paragraphs", [])) + " " + slide.get("bold_line", "")
+        for slide in data.get("slides", [])
+    ).lower()
+
+    seen_paths: set[str] = set()
+    found: list[tuple[str, str]] = []   # (absolute_path, label)
+    missing: list[str] = []
+
+    for keyword, (rel_path, label) in BRAND_REGISTRY.items():
+        if keyword not in text:
+            continue
+        if rel_path in seen_paths:          # same logo already added (e.g. openai + chatgpt)
+            continue
+        seen_paths.add(rel_path)
+        abs_path = project_root / rel_path
+        if abs_path.exists():
+            found.append((rel_path, label))
+        else:
+            missing.append(f"{label} (keyword: '{keyword}')")
+
+    if missing:
+        print(f"\n⚠️  Brands detected in copy but no logo file found:")
+        for m in missing:
+            print(f"     • {m}")
+        print(f"   → Please add the PNG to assets/resources/logos/ and re-run,")
+        print(f"     OR manually set \"logos\" in scripts/{slug}_carousel.json")
+
+    if not found:
+        return None  # will fall back to Claude logo
+
+    # Cap at 3 most prominent (preserve detection order, which follows registry priority)
+    result = ",".join(f"{path}:{label}" for path, label in found[:3])
+    print(f"\n✅ Auto-detected logos: {result}")
+    return result
 
 
 def find_diagram_paths(slug: str) -> list:
@@ -208,9 +280,8 @@ def main():
 
     data = generate_copy(topic, slug, insights)
     data = inject_images(data, slug)
-    # Preserve logos field from research JSON if present; otherwise null (fill manually)
-    if "logos" not in data:
-        data["logos"] = research.get("logos", None)
+    # Auto-detect logos from slide text; fall back to research JSON if set manually
+    data["logos"] = research.get("logos") or detect_logos(data, slug)
     print_review(data)
 
     out_dir  = Path(args.output_dir) if args.output_dir else SCRIPTS
