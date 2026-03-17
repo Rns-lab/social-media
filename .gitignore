@@ -19,3 +19,7 @@ venv/
 # Environment files
 *.env
 .env.*
+
+# Dependencies
+node_modules/
+remotion/node_modules/

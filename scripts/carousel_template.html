@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #000000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── OUTER SLIDE: vertical flex column ── */
+  .slide {
+    width: 1080px;
+    height: 1080px;
+    background: #000000;
+    padding: 38px 40px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* ── COUNTER top-right ── */
+  .counter {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #71767B;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── HEADER ROW: avatar (left) + meta (right), center-aligned ── */
+  /* After this row, body text starts at SAME left edge as avatar */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+    flex-shrink: 0;
+  }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #333;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── META ROW: Name ✓ @handle — all ONE line ── */
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .author-name {
+    font-size: 26px;
+    font-weight: 800;
+    color: #E7E9EA;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .author-handle {
+    font-size: 22px;
+    font-weight: 400;
+    color: #71767B;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  /* ── BODY: full width from left padding (same x as avatar) ── */
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .tweet-text {
+    font-size: 57px;
+    font-weight: 400;
+    color: #E7E9EA;
+    line-height: 1.38;
+    flex-shrink: 0;
+  }
+
+  .tweet-text .bold-line {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .tweet-text p {
+    margin-bottom: 48px;
+  }
+
+  .tweet-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── MEDIA (bottom image) ── */
+  .media {
+    margin-top: auto;
+    padding-top: 28px;
+    flex-shrink: 0;
+  }
+
+  .media img {
+    width: 100%;
+    max-height: 480px;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 18px;
+    display: block;
+    border: 1px solid #2F3336;
+  }
+
+  /* Placeholder when no image is provided */
+  .media-placeholder {
+    width: 100%;
+    height: 380px;
+    border-radius: 18px;
+    border: 1px solid #2F3336;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #71767B;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+{{SLIDES}}
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "slug": "perplexity-computer-vs-manus-ai-computer-agents",
+  "slides": [
+    {
+      "paragraphs": [
+        "AI just got a physical body. Perplexity Computer and Manus can now control your screen, run code, and deploy entire projects.",
+        "Here are 3 things they can do that most CEOs don't know yet:"
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/perplexity-computer-vs-manus-ai-computer-agents/cover_thumbnail.png"
+    },
+    {
+      "bold_line": "1. One prompt replaces 19 specialists",
+      "paragraphs": [
+        "Perplexity Computer routes your request to 19 AI models in parallel — Claude for reasoning, Gemini for research, Nano Banana for visuals — all at once.",
+        "A project that takes a team a week gets done before your next meeting."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/perplexity-computer-vs-manus-ai-computer-agents/diagrams/router_layer.png"
+    },
+    {
+      "bold_line": "2. It runs 24/7 — even when you close your laptop",
+      "paragraphs": [
+        "Local agents die when your screen goes dark. Cloud-based agents like Perplexity Computer keep executing overnight — building, researching, deploying.",
+        "Wake up to a finished product, not a paused process."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/perplexity-computer-vs-manus-ai-computer-agents/diagrams/cloud_24_7.png"
+    },
+    {
+      "bold_line": "3. Zero setup, full control of your machine",
+      "paragraphs": [
+        "Manus installs in minutes and runs terminal commands directly on your hard drive — sorting 10,000 files by content, building apps without an IDE, packaging code for deployment.",
+        "No Docker. No configuration. Just results."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/perplexity-computer-vs-manus-ai-computer-agents/diagrams/manus_local.png"
+    },
+    {
+      "paragraphs": [
+        "I built a full breakdown comparing both systems and which one wins for each use case — PE, Consulting, Real Estate, Wealth Management.",
+        "Comment \"COMPUTER\" and I'll send it over."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/perplexity-computer-vs-manus-ai-computer-agents/nlm_video.png"
+    }
+  ]
+}

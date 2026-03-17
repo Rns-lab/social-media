@@ -174,9 +174,9 @@ async def generate_infographic_step(notebook_id: str, slug: str, project_root: P
     from notebooklm import NotebookLMClient
     from notebooklm.rpc.types import InfographicOrientation, InfographicDetail
 
-    assets_dir = project_root / "assets" / "infographics"
+    assets_dir = project_root / "assets" / "post" / slug
     assets_dir.mkdir(parents=True, exist_ok=True)
-    local_path = assets_dir / f"{slug}.png"
+    local_path = assets_dir / "nlm_infographic.png"
 
     async with await NotebookLMClient.from_storage(timeout=180.0) as client:
         # Prime visual style before generating (required for quality output)
@@ -223,7 +223,7 @@ async def generate_infographic_step(notebook_id: str, slug: str, project_root: P
 
     # Push to GitHub
     print("  Pushing infographic to GitHub...")
-    rel_path = f"assets/infographics/{slug}.png"
+    rel_path = f"assets/post/{slug}/nlm_infographic.png"
     try:
         subprocess.run(["git", "add", rel_path], cwd=str(project_root), check=True, capture_output=True)
         subprocess.run(
@@ -348,8 +348,8 @@ async def main():
     parser.add_argument("--urls", nargs="+", metavar="URL", help="Explicit URLs to add as sources")
     args = parser.parse_args()
 
-    # Default to --yt 15 if no source flags given
-    yt_count = args.yt if args.yt is not None else (15 if not args.urls else 0)
+    # Default to --yt 10 if no source flags given
+    yt_count = args.yt if args.yt is not None else (10 if not args.urls else 0)
     explicit_urls = args.urls or []
 
     project_root = Path(__file__).parent.parent
@@ -372,8 +372,8 @@ async def main():
         print("[ Step 1 ] Scraping YouTube...")
         yt_videos = scrape_youtube(args.topic, yt_count)
         print(f"  Found {len(yt_videos)} videos.")
-        # Add YouTube URLs to sources (top 8 for NotebookLM)
-        source_urls = [v["url"] for v in yt_videos[:8]] + explicit_urls
+        # Add all scraped YouTube URLs as NotebookLM sources
+        source_urls = [v["url"] for v in yt_videos] + explicit_urls
     else:
         print("[ Step 1 ] Using provided URLs only.")
 

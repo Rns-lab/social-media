@@ -1,0 +1,42 @@
+{
+  "slug": "claude-code-scheduled-tasks",
+  "slides": [
+    {
+      "paragraphs": [
+        "Anthropic just shipped scheduled tasks for Claude Code and the internet is losing it.",
+        "Here are 3 ways I'm actually using it:"
+      ]
+    },
+    {
+      "bold_line": "1. Daily standup summary",
+      "paragraphs": [
+        "Every morning at 8am, Claude reads my Slack channels and project notes, summarizes everything, and sends me a Telegram digest.",
+        "I wake up knowing exactly what happened overnight."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-code-scheduled-tasks/diagrams/standup_digest.png"
+    },
+    {
+      "bold_line": "2. Daily content ideas",
+      "paragraphs": [
+        "Every day at noon, Claude checks competitor posts, trending topics, and niche news — then cross-references it with my content pillars.",
+        "I get 10 fresh content ideas without lifting a finger."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-code-scheduled-tasks/diagrams/content_ideas.png"
+    },
+    {
+      "bold_line": "3. Weekly analytics report",
+      "paragraphs": [
+        "Every Friday, Claude pulls my social media metrics, ad performance, and revenue data — analyzes it all and generates a PDF report.",
+        "Ready to share with my team before the weekend."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-code-scheduled-tasks/diagrams/analytics_report.png"
+    },
+    {
+      "paragraphs": [
+        "I built a full video breaking down how each of these works and how to set them up in Claude Code.",
+        "Comment \"SCHEDULED\" and I'll send it over."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-code-scheduled-tasks/nlm_video.png"
+    }
+  ]
+}
