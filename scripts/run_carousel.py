@@ -64,7 +64,8 @@ def main():
 
     with open(content_path) as f:
         data = json.load(f)
-    slug = data.get("slug", "carousel")
+    slug   = data.get("slug", "carousel")
+    cover  = data.get("cover", {})
     # logos: CLI flag takes priority, then carousel JSON field, then fallback to Claude logo
     logos_resolved = args.logos or data.get("logos") or None
 
@@ -92,12 +93,16 @@ def main():
     cover_out.parent.mkdir(parents=True, exist_ok=True)
     if not args.no_cover:
         if face_path.exists():
+            # CLI args take priority over carousel JSON cover fields
+            cover_headline = args.cover_headline if args.cover_headline != "SCHEDULED TASKS" else cover.get("headline", args.cover_headline)
+            cover_subline  = args.cover_subline  if args.cover_subline  != "3 REAL USE CASES" else cover.get("subline",  args.cover_subline)
+            cover_topic    = args.cover_topic    if args.cover_topic    != "Claude Code"       else cover.get("topic",    args.cover_topic)
             cover_cmd = [
                 sys.executable, str(BASE / "generate_cover_thumbnail.py"),
                 "--face",     str(face_path),
-                "--topic",    args.cover_topic,
-                "--headline", args.cover_headline,
-                "--subline",  args.cover_subline,
+                "--topic",    cover_topic,
+                "--headline", cover_headline,
+                "--subline",  cover_subline,
                 "--out",      str(cover_out),
             ]
             if logos_resolved:

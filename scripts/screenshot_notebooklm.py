@@ -189,10 +189,22 @@ async def run(args):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--notebook-id",    required=True, help="NotebookLM notebook UUID")
-    ap.add_argument("--slug",           required=True, help="Post slug (e.g. my-topic)")
+    ap.add_argument("--research-json",  help="Path to research JSON — auto-fills --notebook-id and --slug")
+    ap.add_argument("--notebook-id",    help="NotebookLM notebook UUID (required if no --research-json)")
+    ap.add_argument("--slug",           help="Post slug (required if no --research-json)")
     ap.add_argument("--wait",           type=int, default=20, help="Seconds to wait after Play (default: 20)")
     ap.add_argument("--download-video", action="store_true", help="Download MP4 + update research JSON + push")
     ap.add_argument("--no-push",        action="store_true", help="Skip git push after video download")
     args = ap.parse_args()
+
+    # Auto-fill from research JSON if provided
+    if args.research_json:
+        with open(args.research_json) as f:
+            _r = json.load(f)
+        args.notebook_id = args.notebook_id or _r.get("notebook_id")
+        args.slug        = args.slug        or _r.get("slug")
+
+    if not args.notebook_id or not args.slug:
+        ap.error("Provide --research-json OR both --notebook-id and --slug")
+
     asyncio.run(run(args))

@@ -170,6 +170,11 @@ def generate_copy(topic: str, slug: str, insights: str) -> dict:
     schema = json.dumps({
         "slug": slug,
         "cta_keyword": "KEYWORD",
+        "cover": {
+            "headline": "2-3 ALL-CAPS WORDS (number + noun, e.g. '19 MODELS')",
+            "subline":  "3-4 ALL-CAPS WORDS (outcome phrase, e.g. 'WHILE YOU SLEEP')",
+            "topic":    "1-2 WORDS (domain label, e.g. 'AI AGENTS')",
+        },
         "slides": [
             {"paragraphs": ["Hook line 1.", "Hook line 2 (here are N things):"]},
             {"bold_line": "1. Title", "paragraphs": ["Mechanic ~100 chars.", "Payoff ~50 chars."]},
@@ -193,6 +198,11 @@ For the 3 value slides, pick the 3 most powerful insights:
   3. The most immediately actionable step-by-step insight
 
 Pick a CTA keyword relevant to the topic (e.g., CHECKLIST, PLAYBOOK, FRAMEWORK, GUIDE, SYSTEM).
+
+Also generate cover thumbnail text (cover object):
+- headline: 2-3 ALL-CAPS words capturing the core number/outcome (e.g. "19 MODELS", "3 AUTOMATIONS", "$200 TEAM")
+- subline: 3-4 ALL-CAPS words for the payoff phrase (e.g. "WHILE YOU SLEEP", "IN 11 MINUTES", "NO CODE NEEDED")
+- topic: 1-2 ALL-CAPS words for the domain label (e.g. "AI AGENTS", "CLAUDE CODE", "AUTOMATION")
 
 Return JSON matching this schema exactly:
 {schema}"""

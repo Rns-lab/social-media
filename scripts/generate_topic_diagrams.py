@@ -346,8 +346,11 @@ if __name__ == "__main__":
     elif "diagram_names" in data:
         names = data["diagram_names"]
     else:
-        # Default: derive from slides (any slide with image pointing to diagrams/)
-        names = list(TOPIC_DIAGRAMS.keys())[:3]
+        # No diagram_names in JSON → fall back to generic generate_diagrams.py
+        import subprocess, sys as _sys
+        print(f"  ⚠ No diagram_names in carousel JSON — falling back to generate_diagrams.py")
+        r = subprocess.run([_sys.executable, str(Path(__file__).parent / "generate_diagrams.py"), "--slug", slug])
+        _sys.exit(r.returncode)
 
     print(f"Generating {len(names)} diagrams for '{slug}':")
     paths = render_diagrams(slug, names)
