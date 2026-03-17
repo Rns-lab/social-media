@@ -6,10 +6,14 @@ Creates a YouTube-thumbnail-style image for carousel slide 1.
 Usage:
   python3 generate_cover_thumbnail.py --topic "Claude Code" --headline "3 AUTOMATIONS" \
       --subline "WHILE YOU SLEEP" --face assets/photos/shocked_1.jpg \
-      --out assets/images/cover_thumbnail.png
+      --out assets/images/cover_thumbnail.png \
+      --logos "assets/resources/logos/perplexity.png:Perplexity,assets/resources/logos/manus.png:Manus"
+
+  --logos is a comma-separated list of path:label pairs (up to 3).
+  If omitted, falls back to the Claude logo.
 
 Layout (1000×460px, dark):
-  LEFT  (~520px): colored accent bar + bold headline + subline + Claude logo
+  LEFT  (~520px): colored accent bar + bold headline + subline + logos row
   RIGHT (~480px): Pietro's face, cropped and composited on dark bg
 """
 
@@ -23,15 +27,19 @@ ASSETS = Path(__file__).parent.parent / "assets"
 CLAUDE_LOGO_PNG = ASSETS / "resources" / "Claude Logo Compact.png"
 
 
-def render_logo(_tmp_dir: Path) -> Image.Image | None:
-    """Load the real Claude logo PNG (113×121px RGBA). Never recreate as SVG."""
-    if not CLAUDE_LOGO_PNG.exists():
-        print(f"  ⚠ Claude logo not found: {CLAUDE_LOGO_PNG}")
-        return None
-    logo = Image.open(CLAUDE_LOGO_PNG).convert("RGBA")
-    # Resize to 90×90 for the thumbnail
-    logo = logo.resize((90, 90), Image.LANCZOS)
-    return logo
+def parse_logos(logos_arg: str | None) -> list[tuple[str, str]]:
+    """Parse --logos 'path:label,path:label' into [(path, label), ...]."""
+    if not logos_arg:
+        return []
+    result = []
+    for entry in logos_arg.split(","):
+        entry = entry.strip()
+        if ":" in entry:
+            path, label = entry.split(":", 1)
+        else:
+            path, label = entry, ""
+        result.append((path.strip(), label.strip()))
+    return result[:3]  # max 3
 
 
 def load_face(face_path: str, target_h: int = 440) -> Image.Image:
@@ -57,6 +65,7 @@ def build_thumbnail(
     subline: str,
     face_path: str,
     out_path: str,
+    logos: list[tuple[str, str]] | None = None,
     accent_color: tuple = (230, 92, 0),   # orange
     bg_color: tuple = (10, 10, 10),
 ):
@@ -125,13 +134,22 @@ def build_thumbnail(
     # Subline (accent color)
     draw.text((30, 175), subline, fill=accent_color, font=font_subline, stroke_width=1, stroke_fill=accent_color)
 
-    # ── Claude logo (bottom left) ──
-    logo = render_logo(Path(out_path).parent)
-    if logo:
-        lx, ly = 28, H - 110
-        canvas.paste(logo, (lx, ly), logo)
-        draw.text((lx + 100, ly + 22), "Claude Code", fill=(231, 233, 234),
-                  font=font_topic)
+    # ── Logo row (bottom left) ──
+    LOGO_SIZE = 56
+    logo_entries = logos or []
+    # Fallback to Claude logo if nothing provided
+    if not logo_entries:
+        logo_entries = [(str(CLAUDE_LOGO_PNG), "Claude Code")]
+
+    lx, ly = 28, H - 80
+    for logo_path, logo_label in logo_entries:
+        try:
+            lg = Image.open(logo_path).convert("RGBA")
+            lg = lg.resize((LOGO_SIZE, LOGO_SIZE), Image.LANCZOS)
+            canvas.paste(lg, (lx, ly), lg)
+            lx += LOGO_SIZE + 12
+        except Exception as e:
+            print(f"  ⚠ Logo not loaded ({logo_path}): {e}")
 
     # Save
     canvas.save(out_path, quality=95)
@@ -145,6 +163,8 @@ if __name__ == "__main__":
     ap.add_argument("--subline",  default="WHILE YOU SLEEP")
     ap.add_argument("--face",     default=str(ASSETS / "profile" / "Shock.JPG"))
     ap.add_argument("--out",      default=str(ASSETS / "images" / "cover_thumbnail.png"))
+    ap.add_argument("--logos",    default=None,
+                    help="Comma-separated path:label pairs, e.g. logos/perplexity.png:Perplexity,logos/manus.png:Manus")
     args = ap.parse_args()
 
     if not Path(args.face).exists():
@@ -158,4 +178,5 @@ if __name__ == "__main__":
         subline=args.subline,
         face_path=args.face,
         out_path=args.out,
+        logos=parse_logos(args.logos),
     )
