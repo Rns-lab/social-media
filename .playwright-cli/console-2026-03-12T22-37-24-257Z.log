@@ -1,3 +1,0 @@
-[    1297ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Fproperty%2Fdemo-raw.jpg&w=640&q=75:0
-[    1879ms] [WARNING] Image with src "/property/demo-raw.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/shared/lib/utils/warn-once.js:15
-[   16958ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Fproperty%2Fdemo-raw.jpg&w=1920&q=75:0
