@@ -61,7 +61,7 @@ from PIL import Image, ImageStat
 BASE    = Path(__file__).parent.parent
 SCRIPTS = BASE / "scripts"
 ASSETS  = BASE / "assets"
-SHARED  = BASE.parent.parent / "shared"     # /Users/pietropiga/Desktop/Claude Code/shared
+SHARED  = BASE.parent / "shared"     # /Users/pietropiga/Desktop/Claude Code/shared
 
 load_dotenv(BASE / ".env")
 
@@ -69,7 +69,7 @@ OPENROUTER_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 LLM_MODEL      = os.environ.get("LLM_MODEL", "meta-llama/llama-3.3-70b-instruct:free")
 NOTION_TOKEN   = os.environ.get("NOTION_TOKEN", "")
 MIROFISH_URL   = os.environ.get("MIROFISH_URL", "http://localhost:5001")
-CONTENT_CAL_DB = "2ce71a32-538b-4ce0-b830-29d88ab5bc1c"
+CONTENT_CAL_DB = "923eeb74-6673-43ef-873e-1e3d51aec24a"
 
 sys.path.insert(0, str(SHARED))
 
@@ -78,24 +78,32 @@ sys.path.insert(0, str(SHARED))
 
 def llm(system: str, user: str, max_tokens: int = 2000) -> str:
     client = openai.OpenAI(base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_KEY)
-    msg = client.chat.completions.create(
-        model=LLM_MODEL,
-        max_tokens=max_tokens,
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user",   "content": user},
-        ],
-    )
-    return msg.choices[0].message.content.strip()
+    for attempt in range(8):
+        try:
+            msg = client.chat.completions.create(
+                model=LLM_MODEL,
+                max_tokens=max_tokens,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user",   "content": user},
+                ],
+            )
+            return msg.choices[0].message.content.strip()
+        except openai.RateLimitError:
+            wait = 30 * (2 ** attempt)
+            print(f"  ⏳ Rate limit — waiting {wait}s (attempt {attempt+1}/8)…")
+            time.sleep(wait)
+    raise RuntimeError("LLM rate limit exceeded after 8 retries")
 
 
 def llm_json(system: str, user: str, max_tokens: int = 2000) -> dict | list:
+    from json_repair import repair_json
     raw = llm(system, user, max_tokens)
     if raw.startswith("```"):
         raw = "\n".join(raw.split("\n")[1:]).rstrip("`").strip()
         if raw.startswith("json"):
             raw = raw[4:].strip()
-    return json.loads(raw)
+    return json.loads(repair_json(raw))
 
 
 # ── Step 1: Load research ──────────────────────────────────────────────────────
@@ -607,8 +615,8 @@ def create_notion_pages(topic: str, slug: str, article_title: str, article_body:
     # Article page
     blocks = md_to_blocks(article_body)
     art_payload = {
-        "parent": {"type": "workspace", "workspace": True},
-        "properties": {"title": {"title": [{"text": {"content": article_title}}]}},
+        "parent": {"database_id": CONTENT_CAL_DB},
+        "properties": {"Title": {"title": [{"text": {"content": article_title}}]}},
         "children": blocks[:100],
     }
     print(f"  → Creating article page: '{article_title}'")

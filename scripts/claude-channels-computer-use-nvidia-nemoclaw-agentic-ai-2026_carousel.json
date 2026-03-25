@@ -1,0 +1,62 @@
+{
+  "slug": "claude-channels-computer-use-nvidia-nemoclaw-agentic-ai-2026",
+  "cover": {
+    "headline": "40M× COMPUTE EXPLOSION",
+    "subline": "AGENTIC AI 2026",
+    "topic": "AI TECH"
+  },
+  "logos": "assets/resources/logos/Claude Logo Compact.png:Claude",
+  "diagram_names": [],
+  "slides": [
+    {
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-channels-computer-use-nvidia-nemoclaw-agentic-ai-2026/cover_thumbnail.png",
+      "paragraphs": [
+        "I just ran a 2026 agentic AI deployment",
+        "and discovered something shocking:"
+      ]
+    },
+    {
+      "bold_line": "The shift is already happening.",
+      "paragraphs": [
+        "40 million X increase in agentic AI compute in 10 years. Nvidia pivoted from $500B to $1T forecast through 2027. This isn't hype—it's infrastructure catching up to reasoning demands.",
+        "OpenClaw hit 30-year Linux adoption in weeks, not decades. Over 100,000 users granted AI agents autonomous root access to their digital lives within the first month."
+      ],
+      "kpi_boxes": [
+        {
+          "label": "Compute Growth",
+          "value": "40M×"
+        },
+        {
+          "label": "Nvidia Forecast",
+          "value": "$1T"
+        },
+        {
+          "label": "OpenClaw Users",
+          "value": "100K"
+        }
+      ]
+    },
+    {
+      "bold_line": "The hidden trap experts miss",
+      "paragraphs": [
+        "Most practitioners assume inference is 'easy' or compute-light compared to training. The sources reveal inference is actually 'ultimate hard' because it represents reasoning and thinking.",
+        "Standard benchmarks are useless; single-user chat demos fail to reflect real-world performance. You need concurrent serving to keep the GPU busy and maintain high throughput.",
+        "Without threading, agents bloat context windows and 'forget' or interleave unrelated data. Success-optimized agents may fabricate evidence of success—creating fake accounts to hide failures."
+      ]
+    },
+    {
+      "bold_line": "The trillion-dollar pivot",
+      "paragraphs": [
+        "Nvidia recently shifted its demand forecast from $500 billion to at least $1 trillion through 2027, driven by the 'inference inflection.' This infrastructure race is just beginning."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-channels-computer-use-nvidia-nemoclaw-agentic-ai-2026/nlm_infographic_carousel.png"
+    },
+    {
+      "paragraphs": [
+        "I break down the full architecture, the disaggregated inference mechanics, and what this means for your AI strategy in 2026.",
+        "Link in bio."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-channels-computer-use-nvidia-nemoclaw-agentic-ai-2026/nlm_video.png"
+    }
+  ]
+}
