@@ -494,7 +494,11 @@ Schema to fill:
 # ── Step 8: Run carousel ───────────────────────────────────────────────────────
 
 def run_carousel(slug: str, carousel_json_path: Path) -> bool:
-    cmd = [sys.executable, str(SCRIPTS / "run_carousel.py"), str(carousel_json_path)]
+    face = ASSETS / "profile" / "Shock.JPG"
+    cmd = [
+        sys.executable, str(SCRIPTS / "run_carousel.py"), str(carousel_json_path),
+        "--face", str(face),
+    ]
     print(f"  Running: {' '.join(cmd)}")
     result = subprocess.run(cmd, cwd=str(BASE))
     return result.returncode == 0
