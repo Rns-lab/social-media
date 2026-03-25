@@ -1,0 +1,9 @@
+{
+  "topic": "Perplexity Computer vs Manus AI computer agents",
+  "slug": "perplexity-computer-vs-manus-ai-computer-agents",
+  "notebook_id": "3244c36e-0b17-44cd-8878-420081e549f0",
+  "insights": "Perplexity Computer runs 19 AI models in parallel via a router layer (Claude Opus as conductor). Cloud-based, works while laptop is closed. $200/month. Manus runs locally, zero setup, full terminal access, sorts 10k files by visual content. OpenClaw is free open-source alternative (300k GitHub stars) but 3h setup per task, stops when laptop closes. Use cases: PE deal rooms (week of analyst work → hours), consulting slide QA, real estate portfolio organization, wealth management dashboards.",
+  "infographic_url": null,
+  "nlm_video_url": null,
+  "logos": null
+}

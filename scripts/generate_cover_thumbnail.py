@@ -128,11 +128,42 @@ def build_thumbnail(
     # Topic
     draw.text((30, 38), topic.upper(), fill=(113, 119, 123), font=font_topic)
 
-    # Headline (very large, bold-like via stroke)
-    draw.text((28, 70), headline, fill=(231, 233, 234), font=font_headline, stroke_width=2, stroke_fill=(231, 233, 234))
+    # Headline — auto-scale font + word-wrap to fit left column in max 2 lines
+    MAX_TEXT_W = 455
 
-    # Subline (accent color)
-    draw.text((30, 175), subline, fill=accent_color, font=font_subline, stroke_width=1, stroke_fill=accent_color)
+    def wrap_headline(font_size):
+        try:
+            fnt = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", font_size)
+        except:
+            fnt = ImageFont.load_default()
+        words = headline.split()
+        lines, current = [], ""
+        for word in words:
+            test = (current + " " + word).strip()
+            if draw.textlength(test, font=fnt) <= MAX_TEXT_W:
+                current = test
+            else:
+                if current:
+                    lines.append(current)
+                current = word
+        if current:
+            lines.append(current)
+        return lines, fnt
+
+    # Try decreasing font sizes until headline fits in ≤2 lines
+    for fs in range(88, 39, -4):
+        lines, font_headline = wrap_headline(fs)
+        if len(lines) <= 2:
+            break
+
+    line_h = font_headline.size + 6
+    hy = 62
+    for line in lines:
+        draw.text((28, hy), line, fill=(231, 233, 234), font=font_headline, stroke_width=2, stroke_fill=(231, 233, 234))
+        hy += line_h
+
+    # Subline (accent color) — positioned below headline with fixed gap
+    draw.text((30, hy + 8), subline, fill=accent_color, font=font_subline, stroke_width=1, stroke_fill=accent_color)
 
     # ── Logo row (bottom left) ──
     LOGO_SIZE = 56

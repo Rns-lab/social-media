@@ -21,7 +21,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ASSETS = Path(__file__).parent.parent / "assets"
-CLAUDE_LOGO_PATH = str(ASSETS / "resources" / "Claude Logo Compact.png")
+CLAUDE_LOGO_PATH = str(ASSETS / "resources" / "logos" / "Claude Logo Compact.png")
 
 PERPLEXITY_LOGO = str(ASSETS / "resources" / "logos" / "perplexity.png")
 GEMINI_LOGO     = str(ASSETS / "resources" / "logos" / "gemini.png")
@@ -293,10 +293,192 @@ def build_manus_local_html():
 </body></html>"""
 
 
+def build_decision_matrix_html():
+    """Decision matrix: which AI agent wins for which PE/consulting workflow."""
+    rows = [
+        ("Deal room docs",       "Dispatch",   "#E65C00", "Sandboxed VM — files never leave Mac"),
+        ("NDA file analysis",    "Dispatch",   "#E65C00", "Local execution, compliance-ready"),
+        ("Client QA (Excel/PPT)","Dispatch",   "#E65C00", "Passes context across Office apps"),
+        ("Overnight research",   "Perplexity", "#22D3EE", "Cloud multi-model, queue & walk away"),
+        ("Competitor dashboard", "Perplexity", "#22D3EE", "100+ sources, 7 search types parallel"),
+        ("Property photo sort",  "Manus",      "#A78BFA", "Visual file analysis, free, fully local"),
+    ]
+    row_html = ""
+    for workflow, tool, color, reason in rows:
+        row_html += f"""
+        <div class="row">
+          <div class="cell wf">{workflow}</div>
+          <div class="cell tool" style="color:{color};">{tool}</div>
+          <div class="cell why">{reason}</div>
+        </div>"""
+    return f"""<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+<style>
+* {{ box-sizing: border-box; margin: 0; padding: 0; }}
+body {{
+  width: 1000px; height: 460px;
+  background: #0A0A0A;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Inter", sans-serif;
+  overflow: hidden; color: #E7E9EA;
+  display: flex; flex-direction: column; padding: 28px 40px; gap: 14px;
+}}
+.title {{
+  font-size: 13px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase;
+  color: #E65C00; margin-bottom: 2px;
+}}
+.header, .row {{
+  display: grid;
+  grid-template-columns: 220px 130px 1fr;
+  gap: 0;
+}}
+.header .cell {{
+  font-size: 10px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase;
+  color: rgba(255,255,255,0.28); padding: 0 0 6px 12px;
+}}
+.row {{
+  background: #111111; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 9px; margin-bottom: 5px;
+}}
+.cell {{ padding: 11px 12px; font-size: 13px; display: flex; align-items: center; }}
+.cell.wf {{ font-weight: 600; color: #E7E9EA; border-right: 1px solid rgba(255,255,255,0.06); }}
+.cell.tool {{ font-weight: 800; font-size: 12px; border-right: 1px solid rgba(255,255,255,0.06); letter-spacing: 0.3px; }}
+.cell.why {{ color: rgba(255,255,255,0.45); font-size: 12px; }}
+</style></head><body>
+  <div class="title">Decision Matrix — Which Agent Wins</div>
+  <div class="header">
+    <div class="cell">Workflow</div>
+    <div class="cell">Best Tool</div>
+    <div class="cell">Why</div>
+  </div>
+  {row_html}
+</body></html>"""
+
+
+def build_dispatch_channels_flow_html():
+    """Diagram: Claude Code Dispatch + Channels — async overnight workflow."""
+    return f"""<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+<style>
+{SHARED_CSS}
+.wrap {{ gap: 16px; padding: 32px 38px; }}
+.inputs {{ width: 178px; gap: 10px; }}
+.ai-node {{ width: 148px; padding: 18px 12px; gap: 8px; }}
+.right-col {{
+  flex: 1; display: flex; flex-direction: column; gap: 9px;
+}}
+.task-grid {{
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px;
+}}
+.task-card {{
+  background: rgba(230,92,0,0.06); border: 1px solid rgba(230,92,0,0.22);
+  border-radius: 9px; padding: 10px 11px;
+}}
+.task-num {{
+  font-size: 9px; font-weight: 800; color: #E65C00;
+  letter-spacing: 1.6px; text-transform: uppercase; margin-bottom: 4px;
+}}
+.task-label {{
+  font-size: 12px; font-weight: 700; color: #E7E9EA; line-height: 1.3;
+}}
+.channels-bar {{
+  background: #111111; border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 11px 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}}
+.ch-label {{
+  font-size: 9px; font-weight: 800; color: rgba(255,255,255,0.28);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px;
+}}
+.ch-icons {{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }}
+.ch-badge {{
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #1A1A1A; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; padding: 4px 9px;
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.55);
+}}
+.ch-dot {{ width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }}
+.delivered-chip {{
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 13px; border: 1px solid rgba(74,222,128,0.25);
+  border-radius: 8px; white-space: nowrap; flex-shrink: 0;
+}}
+.delivered-dot {{ width: 7px; height: 7px; border-radius: 50%; background: #4ADE80; box-shadow: 0 0 8px rgba(74,222,128,0.7); }}
+.delivered-text {{ font-size: 12px; font-weight: 700; color: #4ADE80; }}
+.delivered-sub {{ font-size: 10px; color: rgba(255,255,255,0.28); margin-top: 1px; }}
+</style></head><body>
+<div class="wrap">
+
+  <div class="inputs">
+    <div class="input-node">{dot('#60A5FA','→')}<span class="node-label">Task sent<br/><span style="font-size:11px;color:rgba(255,255,255,0.3);">9:00 PM</span></span></div>
+    <div class="input-node">{dot('#F87171','!')}<span class="node-label">CI alert<br/><span style="font-size:11px;color:rgba(255,255,255,0.3);">2:00 AM</span></span></div>
+    <div style="padding:6px 0; text-align:center;">
+      <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.18);letter-spacing:1.6px;text-transform:uppercase;">You're asleep</div>
+    </div>
+    <div class="out-card" style="padding:10px 12px;">
+      <div class="out-eyebrow">Agents spawned</div>
+      <div style="font-size:28px;font-weight:800;color:#E65C00;line-height:1;">3</div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:1px;">in parallel</div>
+    </div>
+  </div>
+
+  <div class="connector">
+    <span class="conn-label">Dispatch<br/>routes</span>
+    {arrow_svg('g1')}
+  </div>
+
+  <div class="ai-node">
+    {logo_img(CLAUDE_LOGO_PATH, 44)}
+    <div class="ai-label">Claude Code</div>
+    <div class="ai-sublabel">Dispatch +<br/>Channels</div>
+  </div>
+
+  <div class="connector">
+    {arrow_svg('g2')}
+    <span class="conn-label">Runs</span>
+  </div>
+
+  <div class="right-col">
+    <div class="task-grid">
+      <div class="task-card">
+        <div class="task-num">Task 01</div>
+        <div class="task-label">Fix CI failure</div>
+      </div>
+      <div class="task-card">
+        <div class="task-num">Task 02</div>
+        <div class="task-label">Run test suite</div>
+      </div>
+      <div class="task-card">
+        <div class="task-num">Task 03</div>
+        <div class="task-label">Write PR summary</div>
+      </div>
+    </div>
+    <div class="channels-bar">
+      <div>
+        <div class="ch-label">Channels — delivers results via</div>
+        <div class="ch-icons">
+          <div class="ch-badge"><div class="ch-dot" style="background:#5865F2;"></div>Discord</div>
+          <div class="ch-badge"><div class="ch-dot" style="background:#4A154B;"></div>Slack</div>
+          <div class="ch-badge"><div class="ch-dot" style="background:#EA4335;"></div>Email</div>
+        </div>
+      </div>
+      <div class="delivered-chip">
+        <div class="delivered-dot"></div>
+        <div>
+          <div class="delivered-text">7:00 AM ✓</div>
+          <div class="delivered-sub">Summary delivered</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body></html>"""
+
+
 TOPIC_DIAGRAMS = {
-    "router_layer":    build_router_layer_html,
-    "cloud_24_7":      build_cloud_24_7_html,
-    "manus_local":     build_manus_local_html,
+    "router_layer":             build_router_layer_html,
+    "cloud_24_7":               build_cloud_24_7_html,
+    "manus_local":              build_manus_local_html,
+    "decision_matrix":          build_decision_matrix_html,
+    "dispatch_channels_flow":   build_dispatch_channels_flow_html,
 }
 
 

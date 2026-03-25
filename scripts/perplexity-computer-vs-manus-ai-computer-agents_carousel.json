@@ -1,0 +1,70 @@
+{
+  "slug": "perplexity-computer-vs-manus-ai-computer-agents",
+  "cover": {
+    "headline": "3 AGENTS. 1 WINNER.",
+    "subline": "I TESTED THEM BACK TO BACK",
+    "topic": "AI AGENTS"
+  },
+  "logos": "assets/resources/logos/perplexity.png:Perplexity,assets/resources/logos/manus.png:Manus,assets/resources/logos/Claude Logo Compact.png:Dispatch",
+  "diagram_names": ["router_layer", "decision_matrix"],
+  "slides": [
+    {
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/perplexity-computer-vs-manus-ai-computer-agents/cover_thumbnail.png",
+      "paragraphs": [
+        "I tested three AI agents. One costs 10x more — but the intelligence gap is only 15%.",
+        "Custom agents: $4,980/month. Perplexity Computer: $200. Claude Dispatch: $20. Here's my decision matrix:"
+      ]
+    },
+    {
+      "bold_line": "1. Cloud. Works while you sleep.",
+      "paragraphs": [
+        "Perplexity Computer runs 19 AI models in parallel — 400+ connectors, persistent memory. I set it a task at 11pm. It was done by morning."
+      ],
+      "kpi_boxes": [
+        {"label": "MONTHLY", "value": "$200"},
+        {"label": "MODELS", "value": "19"},
+        {"label": "CONNECTORS", "value": "400+"}
+      ],
+      "video_banner": "assets/post/perplexity-computer-vs-manus-ai-computer-agents/product_frames/perplexity.webp"
+    },
+    {
+      "bold_line": "2. Local. Works while you're out.",
+      "paragraphs": [
+        "Claude Dispatch pairs your iPhone to your Mac via encrypted bridge. I texted it a deal brief. 47 min later — done. My analyst: 3 hours."
+      ],
+      "kpi_boxes": [
+        {"label": "MONTHLY", "value": "$20"},
+        {"label": "DISPATCH", "value": "47 MIN"},
+        {"label": "ANALYST", "value": "3 HRS"}
+      ],
+      "video_banner": "assets/post/perplexity-computer-vs-manus-ai-computer-agents/product_frames/claude.webp"
+    },
+    {
+      "bold_line": "3. Which one for your workflow?",
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/perplexity-computer-vs-manus-ai-computer-agents/diagrams/decision_matrix.png",
+      "paragraphs": [
+        "For 90% of PE and consulting work, $20 is enough. The 10% where Perplexity still wins: overnight tasks that need your Mac to stay on, and 100+ source research runs."
+      ]
+    },
+    {
+      "paragraphs": [
+        "For 90% of PE and consulting workflows, $20 is enough. Your data never leaves your machine.",
+        "I put together the full decision matrix — setup, privacy trade-offs, which wins for each workflow. Comment DISPATCH and I'll send it."
+      ],
+      "triple_assets": [
+        {
+          "path": "assets/post/perplexity-computer-vs-manus-ai-computer-agents/nlm_infographic.png",
+          "label": "Research"
+        },
+        {
+          "path": "assets/post/perplexity-computer-vs-manus-ai-computer-agents/nlm_video.png",
+          "label": "NLM Overview"
+        },
+        {
+          "path": "assets/post/perplexity-computer-vs-manus-ai-computer-agents/product_frames/perplexity.webp",
+          "label": "Product"
+        }
+      ]
+    }
+  ]
+}

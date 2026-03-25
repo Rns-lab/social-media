@@ -1,0 +1,52 @@
+{
+  "slug": "claude-code-dispatch-channels",
+  "cover": {
+    "headline": "YOUR AI WORKS WHILE YOU SLEEP.",
+    "subline": "CHANNELS + DISPATCH",
+    "topic": "CLAUDE CODE"
+  },
+  "logos": "assets/resources/logos/Claude Logo Compact.png:Claude",
+  "diagram_names": ["dispatch_channels_flow"],
+  "slides": [
+    {
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-code-dispatch-channels/cover_thumbnail.png",
+      "paragraphs": [
+        "Most people won't tell you the number that doesn't make the ROI deck.",
+        "Autonomous agents without guardrails are hitting 50% cloud overspend in 2026. Anthropic just shipped the answer."
+      ]
+    },
+    {
+      "bold_line": "The shift is already happening.",
+      "paragraphs": [
+        "Send a task at 9pm. Go to sleep. Wake up to finished work.",
+        "CI fails at 2am — Claude gets the Discord alert, fixes it, sends you a summary. You're still asleep."
+      ],
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-code-dispatch-channels/diagrams/dispatch_channels_flow.png",
+      "kpi_boxes": [
+        {"label": "DESK TRIPS CUT", "value": "80%"},
+        {"label": "FASTER DEV", "value": "2-3×"},
+        {"label": "DEPLOY DAILY", "value": "45%"}
+      ]
+    },
+    {
+      "bold_line": "Speed without guardrails is just expensive chaos.",
+      "paragraphs": [
+        "Agents without financial controls hit 50% cloud overspend in 2026. ClawWorm infected 40,000+ instances via one group chat.",
+        "Before you deploy: task-level spend limits. Job-level permission isolation. Real-time execution logs. In that order.",
+        "Ask yourself: who approves each agent action? Who sees the logs in real time? If you don't have answers — you're not ready to scale."
+      ]
+    },
+    {
+      "bold_line": "The ClawWorm attack — how it spreads.",
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-code-dispatch-channels/nlm_infographic_carousel.png",
+      "paragraphs": ["Web injection: 100% propagation rate. Supply chain poisoning: 98%. One group chat message — no admin access needed."]
+    },
+    {
+      "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-code-dispatch-channels/nlm_video.png",
+      "paragraphs": [
+        "I broke down the full Channels + Dispatch framework — how to set it up, what guardrails to put in place, and where teams get burned.",
+        "Full research in the article. Link in bio."
+      ]
+    }
+  ]
+}

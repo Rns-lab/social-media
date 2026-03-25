@@ -30,6 +30,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import anthropic
+import openai
 import requests
 
 # ── Config ────────────────────────────────────────────────────────────────────
@@ -233,7 +234,8 @@ Hook formula (YouTube-proven): [Known Tool/Pain] + [Business Action] + [$ or Tim
 
 
 def generate_content(topic: str, slug: str, insights: str, infographic_url: str | None, nlm_video_url: str | None = None) -> dict:
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    openrouter_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")
+    client = openai.OpenAI(base_url="https://openrouter.ai/api/v1", api_key=openrouter_key)
 
     research_deep_dive = "---\n## Research Deep Dive\n\n*An article by Pietro Piga — AI Sales Advisor*\n\n"
     if nlm_video_url:
@@ -292,14 +294,17 @@ Return ONLY this JSON (no markdown fences):
   "cta_keyword": "CHECKLIST"
 }}"""
 
-    msg = client.messages.create(
-        model="claude-opus-4-6",
+    model = os.environ.get("LLM_MODEL", "meta-llama/llama-3.3-70b-instruct:free")
+    msg = client.chat.completions.create(
+        model=model,
         max_tokens=6000,
-        system=CONTENT_SYSTEM,
-        messages=[{"role": "user", "content": prompt}],
+        messages=[
+            {"role": "system", "content": CONTENT_SYSTEM},
+            {"role": "user", "content": prompt},
+        ],
     )
 
-    raw = msg.content[0].text.strip()
+    raw = msg.choices[0].message.content.strip()
     if raw.startswith("```"):
         raw = "\n".join(raw.split("\n")[1:]).rstrip("`").strip()
         if raw.startswith("json"):
@@ -391,8 +396,8 @@ def main():
         print("   Run with --dry-run to test without Notion credentials.")
         sys.exit(1)
 
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        print("❌ ANTHROPIC_API_KEY not set.")
+    if not (os.environ.get("OPENROUTER_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")):
+        print("❌ OPENROUTER_API_KEY (or ANTHROPIC_API_KEY) not set.")
         sys.exit(1)
 
     src = Path(args.research_json)
@@ -416,7 +421,7 @@ def main():
         print("  ⚠ DRY RUN — no pages will be created\n")
 
     # ── Generate content ──────────────────────────────────────────────────────
-    print("→ Generating content with Claude Opus…")
+    print(f"→ Generating content with Llama ({os.environ.get('LLM_MODEL','meta-llama/llama-3.3-70b-instruct:free')})…")
     content = generate_content(topic, slug, insights, infographic_url, nlm_video_url)
 
     article_title = content["article_title"]

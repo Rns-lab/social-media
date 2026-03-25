@@ -23,7 +23,7 @@ import os
 import sys
 from pathlib import Path
 
-import anthropic
+import openai
 
 ASSETS  = Path(__file__).parent.parent / "assets"
 SCRIPTS = Path(__file__).parent
@@ -165,7 +165,9 @@ def find_cta_image(slug: str) -> str | None:
 
 
 def generate_copy(topic: str, slug: str, insights: str) -> dict:
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    or_key = os.environ.get("OPENROUTER_API_KEY", "")
+    model  = os.environ.get("LLM_MODEL", "meta-llama/llama-3.3-70b-instruct:free")
+    client = openai.OpenAI(base_url="https://openrouter.ai/api/v1", api_key=or_key)
 
     schema = json.dumps({
         "slug": slug,
@@ -207,14 +209,16 @@ Also generate cover thumbnail text (cover object):
 Return JSON matching this schema exactly:
 {schema}"""
 
-    msg = client.messages.create(
-        model="claude-opus-4-6",
+    msg = client.chat.completions.create(
+        model=model,
         max_tokens=1200,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": prompt}],
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ],
     )
 
-    raw = msg.content[0].text.strip()
+    raw = msg.choices[0].message.content.strip()
     # Strip markdown code fences if model wraps output
     if raw.startswith("```"):
         raw = "\n".join(raw.split("\n")[1:])
@@ -267,8 +271,8 @@ def main():
     ap.add_argument("--output-dir", help="Where to save the carousel JSON (default: scripts/)")
     args = ap.parse_args()
 
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        print("❌ ANTHROPIC_API_KEY not set. Add it to .env or export it.")
+    if not os.environ.get("OPENROUTER_API_KEY"):
+        print("❌ OPENROUTER_API_KEY not set. Add it to .env or export it.")
         sys.exit(1)
 
     src = Path(args.research_json)
@@ -286,7 +290,7 @@ def main():
     print(f"\n=== Carousel Copy Writer ===")
     print(f"Topic : {topic}")
     print(f"Slug  : {slug}")
-    print("→ Calling Claude Opus to draft copy…")
+    print(f"→ Calling Llama ({os.environ.get('LLM_MODEL','meta-llama/llama-3.3-70b-instruct:free')}) to draft copy…")
 
     data = generate_copy(topic, slug, insights)
     data = inject_images(data, slug)

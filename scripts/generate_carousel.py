@@ -55,13 +55,64 @@ def header_html() -> str:
     </div>"""
 
 
+def resolve_path(img_path: str, output_dir: Path) -> Path | None:
+    p = Path(img_path)
+    if not p.is_absolute():
+        # Try relative to repo root first, then relative to output_dir
+        repo_root = Path(__file__).parent.parent
+        candidate = repo_root / img_path
+        if candidate.exists():
+            return candidate
+        p = output_dir / img_path
+    return p if p.exists() else None
+
+
+def kpi_boxes_html(boxes: list) -> str:
+    if not boxes:
+        return ""
+    items = ""
+    for b in boxes:
+        items += f'<div class="kpi-box"><div class="kpi-value">{b["value"]}</div><div class="kpi-label">{b["label"]}</div></div>'
+    return f'<div class="kpi-row">{items}</div>'
+
+
+def video_banner_html(path_str: str, output_dir: Path) -> str:
+    p = resolve_path(path_str, output_dir)
+    if p and p.exists():
+        if p.suffix.lower() == ".webm":
+            return f'<div class="video-banner"><video src="file://{p.absolute()}" autoplay muted loop playsinline></video></div>'
+        return f'<div class="video-banner"><img src="file://{p.absolute()}" alt=""/></div>'
+    return ""
+
+
+def triple_assets_html(assets: list, output_dir: Path) -> str:
+    if not assets:
+        return ""
+    frames = ""
+    for asset in assets:
+        p = resolve_path(asset.get("path", ""), output_dir)
+        label = asset.get("label", "")
+        if p and p.exists():
+            frames += f'<div class="asset-frame"><img src="file://{p.absolute()}" alt=""/><div class="asset-label">{label}</div></div>'
+    if not frames:
+        return ""
+    return f'<div class="triple-assets">{frames}</div>'
+
+
 def media_html(slide: dict, output_dir: Path) -> str:
+    # triple_assets takes priority as CTA visual
+    if slide.get("triple_assets"):
+        return triple_assets_html(slide["triple_assets"], output_dir)
+
+    # video_banner for product slides
+    if slide.get("video_banner"):
+        return video_banner_html(slide["video_banner"], output_dir)
+
+    # standard bottom image
     img_path = slide.get("image", "")
     if img_path:
-        p = Path(img_path)
-        if not p.is_absolute():
-            p = output_dir / img_path
-        if p.exists():
+        p = resolve_path(img_path, output_dir)
+        if p and p.exists():
             return f'<div class="media"><img src="file://{p.absolute()}" alt=""/></div>'
 
     bg    = slide.get("image_bg", "#0D1117")
@@ -75,19 +126,22 @@ def media_html(slide: dict, output_dir: Path) -> str:
 def build_slide(slide: dict, idx: int, total: int, output_dir: Path) -> str:
     bold_line  = slide.get("bold_line", "")
     paragraphs = slide.get("paragraphs", [])
+    boxes      = slide.get("kpi_boxes", [])
 
     bold_html  = f'<span class="bold-line">{bold_line}</span>' if bold_line else ""
     paras_html = "".join(f"<p>{p}</p>" for p in paragraphs)
     counter    = f'<div class="counter">{idx}/{total}</div>' if total > 1 else ""
+    kpi_html   = kpi_boxes_html(boxes)
 
     # Scale font size down for longer content
     total_chars = sum(len(p) for p in paragraphs) + len(bold_line)
-    has_image   = bool(slide.get("image") or slide.get("image_label"))
+    has_media   = bool(slide.get("image") or slide.get("image_label") or
+                       slide.get("video_banner") or slide.get("triple_assets"))
 
-    if has_image:
-        if total_chars > 250: font_size = "40px"
-        elif total_chars > 160: font_size = "44px"
-        else: font_size = "48px"
+    if has_media or boxes:
+        if total_chars > 250: font_size = "38px"
+        elif total_chars > 160: font_size = "42px"
+        else: font_size = "46px"
     else:
         if total_chars > 320: font_size = "44px"
         elif total_chars > 220: font_size = "50px"
@@ -101,6 +155,7 @@ def build_slide(slide: dict, idx: int, total: int, output_dir: Path) -> str:
         <div class="tweet-text" style="font-size:{font_size}">
           {bold_html}{paras_html}
         </div>
+        {kpi_html}
         {media_html(slide, output_dir)}
       </div>
     </div>"""
@@ -136,7 +191,9 @@ def generate_carousel(content_file: str, output_dir: str = None):
                 page.wait_for_load_state("networkidle", timeout=5000)
             except Exception:
                 pass
-            page.wait_for_timeout(300)
+            # Extra wait for .webm video banners to start playing
+            has_webm = str(slide_data.get("video_banner", "")).endswith(".webm")
+            page.wait_for_timeout(1500 if has_webm else 300)
 
             dest = str(out / f"slide_{i:02d}.png")
             page.screenshot(path=dest, clip={"x": 0, "y": 0, "width": 1080, "height": 1080})

@@ -166,6 +166,106 @@ LEAD MAGNET: [resource type]"""
         }
 
 
+def _get_ffmpeg() -> str:
+    """Return ffmpeg binary path — bundled via imageio-ffmpeg, no brew needed."""
+    try:
+        import imageio_ffmpeg
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except ImportError:
+        return "ffmpeg"  # fall back to system ffmpeg if available
+
+
+def _extract_frame(mp4_path: Path, output_path: Path) -> bool:
+    """Extract a keyframe from MP4 using ffmpeg. Tries multiple timestamps."""
+    ffmpeg = _get_ffmpeg()
+    for ts in [8, 4, 2, 1]:
+        try:
+            subprocess.run(
+                [ffmpeg, "-y", "-ss", str(ts), "-i", str(mp4_path),
+                 "-vframes", "1", "-q:v", "2", str(output_path)],
+                capture_output=True, timeout=30,
+            )
+            if output_path.exists() and output_path.stat().st_size > 0:
+                return True
+        except subprocess.TimeoutExpired:
+            continue
+    return False
+
+
+async def generate_video_step(notebook_id: str, slug: str, project_root: Path, topic: str) -> str | None:
+    """
+    Generate a NotebookLM Video Overview, download MP4, extract keyframe PNG.
+    Returns GitHub raw URL of the MP4, or None on failure.
+    """
+    from notebooklm import NotebookLMClient
+    from notebooklm.rpc.types import VideoStyle, VideoFormat
+
+    assets_dir = project_root / "assets" / "post" / slug
+    assets_dir.mkdir(parents=True, exist_ok=True)
+    mp4_path = assets_dir / "nlm_video_overview.mp4"
+    png_path = assets_dir / "nlm_video.png"
+
+    async with await NotebookLMClient.from_storage(timeout=180.0) as client:
+        print("  [video] Generating Video Overview (WHITEBOARD)...")
+        await client.artifacts.generate_video(
+            notebook_id,
+            instructions=(
+                f"Create a professional visual explainer about '{topic}'. "
+                "Lead with the most surprising number or business outcome. "
+                "Audience: PE operators, management consultants, C-suite. "
+                "Tone: data-driven, direct, no buzzwords."
+            ),
+            video_format=VideoFormat.EXPLAINER,
+            video_style=VideoStyle.WHITEBOARD,
+        )
+
+        print("  [video] Polling for completion (up to 45 min)", end="", flush=True)
+        art = None
+        for _ in range(270):  # 270 × 10s = 45 min
+            await asyncio.sleep(10)
+            videos = await client.artifacts.list_video(notebook_id)
+            if videos:
+                art = videos[-1]
+                if art.is_completed:
+                    print(" done.")
+                    break
+                if art.status == 4:  # failed
+                    print(" FAILED.")
+                    return None
+            print(".", end="", flush=True)
+        else:
+            print(" timed out.")
+            return None
+
+        print("  [video] Downloading MP4...")
+        await client.artifacts.download_video(notebook_id, str(mp4_path), artifact_id=art.id)
+        print(f"  [video] {mp4_path.stat().st_size / 1024 / 1024:.1f} MB saved")
+
+    # Extract keyframe for carousel
+    _extract_frame(mp4_path, png_path)
+
+    # Git push
+    rel_mp4 = f"assets/post/{slug}/nlm_video_overview.mp4"
+    rel_png = f"assets/post/{slug}/nlm_video.png"
+    files = [rel_mp4]
+    if png_path.exists():
+        files.append(rel_png)
+    try:
+        subprocess.run(["git", "add"] + files, cwd=str(project_root), check=True, capture_output=True)
+        subprocess.run(
+            ["git", "commit", "-m", f"feat: add video overview for {slug}"],
+            cwd=str(project_root), check=True, capture_output=True,
+        )
+        subprocess.run(["git", "push"], cwd=str(project_root), check=True, capture_output=True)
+    except subprocess.CalledProcessError as e:
+        stderr = e.stderr.decode().strip() if e.stderr else str(e)
+        print(f"  [video] Warning: git push failed — {stderr}")
+
+    raw_url = f"https://raw.githubusercontent.com/{GITHUB_REPO}/{GITHUB_BRANCH}/{rel_mp4}"
+    print(f"  [video] URL: {raw_url}")
+    return raw_url
+
+
 async def generate_infographic_step(notebook_id: str, slug: str, project_root: Path) -> str | None:
     """
     Generate a NotebookLM infographic, push to GitHub, return public raw URL.
@@ -194,6 +294,11 @@ async def generate_infographic_step(notebook_id: str, slug: str, project_root: P
             notebook_id,
             orientation=InfographicOrientation.PORTRAIT,
             detail_level=InfographicDetail.DETAILED,
+            instructions=(
+                "Create a professional infographic with the most surprising stats and business outcomes. "
+                "Lead with a bold headline number. Include 3-5 supporting data points. "
+                "End with a single clear takeaway. Audience: PE operators, consultants, C-suite."
+            ),
         )
 
         # Poll until completed (max 5 min = 30 x 10s)
@@ -260,6 +365,7 @@ def save_outputs(
     notebooklm_result: dict,
     output_dir: Path,
     infographic_url: str | None = None,
+    nlm_video_url: str | None = None,
 ):
     slug = slugify(topic)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -272,6 +378,7 @@ def save_outputs(
         "notebook_id": notebooklm_result["notebook_id"],
         "notebook_name": notebooklm_result["notebook_name"],
         "infographic_url": infographic_url,
+        "nlm_video_url": nlm_video_url,
         "insights": notebooklm_result["insights"],
         "source_urls": source_urls,
     }
@@ -393,10 +500,17 @@ async def main():
         notebooklm_result["notebook_id"], slug, project_root
     )
 
-    # --- Step 4: Save outputs ---
-    print("\n[ Step 4 ] Saving outputs...")
+    # --- Step 4: Generate video overview ---
+    print("\n[ Step 4 ] Generating Video Overview...")
+    nlm_video_url = await generate_video_step(
+        notebooklm_result["notebook_id"], slug, project_root, args.topic
+    )
+
+    # --- Step 5: Save outputs ---
+    print("\n[ Step 5 ] Saving outputs...")
     json_path, md_path = save_outputs(
-        args.topic, source_urls, yt_videos, notebooklm_result, output_dir, infographic_url
+        args.topic, source_urls, yt_videos, notebooklm_result, output_dir,
+        infographic_url, nlm_video_url,
     )
 
     print("\n=== Done ===")
@@ -405,6 +519,8 @@ async def main():
     print(f"NotebookLM ID:   {notebooklm_result['notebook_id']}")
     if infographic_url:
         print(f"Infographic URL: {infographic_url}")
+    if nlm_video_url:
+        print(f"Video URL:       {nlm_video_url}")
     print()
     print("Next step: give Claude the JSON path to create Notion lead magnet pages.")
 

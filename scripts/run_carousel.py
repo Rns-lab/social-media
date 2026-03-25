@@ -69,7 +69,7 @@ def main():
     # logos: CLI flag takes priority, then carousel JSON field, then fallback to Claude logo
     logos_resolved = args.logos or data.get("logos") or None
 
-    out_dir = args.output_dir or str(ASSETS / "images" / "carousel_final")
+    out_dir = args.output_dir or str(ASSETS / "post" / slug / "carousel")
 
     print(f"\n🚀 Building carousel: '{slug}'")
     print(f"   Content : {content_path}")
