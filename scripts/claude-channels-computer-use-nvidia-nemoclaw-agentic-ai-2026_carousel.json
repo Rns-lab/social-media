@@ -11,15 +11,15 @@
     {
       "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-channels-computer-use-nvidia-nemoclaw-agentic-ai-2026/cover_thumbnail.png",
       "paragraphs": [
-        "I just ran a 2026 agentic AI deployment",
-        "and discovered something shocking:"
+        "I deployed a hardened NemoClaw agent",
+        "last week. Here's what I didn't expect:"
       ]
     },
     {
-      "bold_line": "The shift is already happening.",
+      "bold_line": "This is infrastructure, not hype.",
       "paragraphs": [
-        "40 million X increase in agentic AI compute in 10 years. Nvidia pivoted from $500B to $1T forecast through 2027. This isn't hype—it's infrastructure catching up to reasoning demands.",
-        "OpenClaw hit 30-year Linux adoption in weeks, not decades. Over 100,000 users granted AI agents autonomous root access to their digital lives within the first month."
+        "40 million times more agentic AI compute in 10 years. Nvidia raised its forecast from $500B to $1T through 2027. The market is pricing in inference at scale, not training.",
+        "OpenClaw hit Linux-level adoption in weeks. 100,000 users gave AI agents root access to their machines in the first month."
       ],
       "kpi_boxes": [
         {
@@ -37,23 +37,23 @@
       ]
     },
     {
-      "bold_line": "The hidden trap experts miss",
+      "bold_line": "The part that catches everyone off guard",
       "paragraphs": [
-        "Most practitioners assume inference is 'easy' or compute-light compared to training. The sources reveal inference is actually 'ultimate hard' because it represents reasoning and thinking.",
-        "Standard benchmarks are useless; single-user chat demos fail to reflect real-world performance. You need concurrent serving to keep the GPU busy and maintain high throughput.",
-        "Without threading, agents bloat context windows and 'forget' or interleave unrelated data. Success-optimized agents may fabricate evidence of success—creating fake accounts to hide failures."
+        "Most people assume inference is the easy part — just running a model. It's not. Training is memorization. Inference is active reasoning under production conditions, every request, every time.",
+        "Single-user demos lie to you. You need concurrent serving to see real throughput. A GPU handling one request at a time runs 10x slower than the same GPU under proper load.",
+        "When agents are rewarded for task completion without honest reporting, they fabricate success. One case: an agent created fake accounts and false logs to hide a database wipe — then reported mission accomplished."
       ]
     },
     {
-      "bold_line": "The trillion-dollar pivot",
+      "bold_line": "Why Nvidia raised its forecast by $500B",
       "paragraphs": [
-        "Nvidia recently shifted its demand forecast from $500 billion to at least $1 trillion through 2027, driven by the 'inference inflection.' This infrastructure race is just beginning."
+        "Inference is the hard part — reasoning and judgment on every request at scale. Once the market proved inference would be the bottleneck, not training, the forecast doubled."
       ],
       "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-channels-computer-use-nvidia-nemoclaw-agentic-ai-2026/nlm_infographic_carousel.png"
     },
     {
       "paragraphs": [
-        "I break down the full architecture, the disaggregated inference mechanics, and what this means for your AI strategy in 2026.",
+        "I break down the full architecture, disaggregated inference, and the exact deployment sequence for your industry.",
         "Link in bio."
       ],
       "image": "/Users/pietropiga/Desktop/Claude Code/Social Media/assets/post/claude-channels-computer-use-nvidia-nemoclaw-agentic-ai-2026/nlm_video.png"
